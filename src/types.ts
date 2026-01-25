@@ -2,11 +2,17 @@ interface SongIdea {
   id: string;
   name: string;
   description: string;
-  chordSequence?: string;
-  verse?: string;
   soloIdea?: string;
   melodyIdea?: string;
   lyrics?: string;
+  recordings?: Recording[];
 }
 
-export type { SongIdea };
+interface Recording {
+  id: string;
+  ideaId: string;
+  url: string;
+  createdAt: string;
+}
+
+export type { SongIdea, Recording };

@@ -26,7 +26,7 @@ export default function NewSongIdea({ onAdd }: Props) {
           <label className="block">Description</label>
           <textarea value={description} onChange={e => setDescription(e.target.value)} className="border p-2 w-full" required />
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+        <button type="submit" className="bg-primary px-4 py-2 rounded">Save</button>
       </form>
     </div>
   );

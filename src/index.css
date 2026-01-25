@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+:root {
+  /* Required for light-dark() to function */
+  color-scheme: light dark;
+}
+
+@theme {
+  /* Syntax: light-dark(lightModeColor, darkModeColor) */
+  --color-modal: light-dark(#60a5fa,#3b82f6);
+  --color-primary: light-dark(#3b82f6, #60a5fa);
+  --color-secondary: light-dark(#8b5cf6, #a78bfa);
+  --color-tertiary: light-dark(#ec4899, #f472b6);
+
+}

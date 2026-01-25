@@ -8,14 +8,14 @@ const Tabs = ({ tabs }: Props) => {
     const [activeTab, setActiveTab] = useState(tabs[0].label);
 
     return <div className="max-w-4xl mx-auto mt-8">
-        <div className="flex border-b border-gray-300">
+        <div className="flex ">
             {
                 tabs.map((tab) => (
                     <button
                         key={tab.label}
                         onClick={() => setActiveTab(tab.label)}
                         className={`flex-1 py-2 px-4 text-center front-medium transition duration-300 ${activeTab === tab.label
-                            ? 'border-b-2 border-purple-500 text-purple-600' : 'text-gray-600 hover:text-purple-700'
+                            ? 'border-b-2 border-tertiary text-tertiary' : 'border-b-2 border-gray-500 text-gray-600 hover:text-secondary'
                             }`}>
                         {tab.label}
                     </button>
