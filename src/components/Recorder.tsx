@@ -1,14 +1,22 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Recording } from '../types';
 import { useReactMediaRecorder } from 'react-media-recorder';
 
 interface Props {
     recordings: Recording[];
+    onStop?: (blobUrl: string) => void;
 }
 
-const Recorder = ({ recordings }: Props) => {
-    const { status, startRecording, stopRecording, mediaBlobUrl } =
-        useReactMediaRecorder({ video: false });
+const Recorder = ({ recordings, onStop }: Props) => {
+    const { status, startRecording, stopRecording } = useReactMediaRecorder({
+        video: false,
+        onStop: (mediaBlobUrl, blob) => {
+            clearInterval(intervalRef.current);
+            setSeconds(0);
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            onStop && mediaBlobUrl && onStop(mediaBlobUrl);
+        },
+    });
     const [seconds, setSeconds] = useState(0);
 
     const isRecording = status === 'recording';
@@ -20,10 +28,7 @@ const Recorder = ({ recordings }: Props) => {
         }, 1000);
     };
 
-    const stopTimer = () => {
-        clearInterval(intervalRef.current);
-        setSeconds(0);
-    };
+    const stopTimer = () => {};
 
     const hadleStartRecording = () => {
         if (!isRecording) {
@@ -48,33 +53,38 @@ const Recorder = ({ recordings }: Props) => {
     };
 
     return (
-        <div className='flex flex-col items-center'>
-            <svg
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 24 24'
-                className={`size-24 ${isRecording ? ' fill-red-500' : ' fill-secondary'}`}
-            >
-                <path d='M8.25 4.5a3.75 3.75 0 1 1 7.5 0v8.25a3.75 3.75 0 1 1-7.5 0V4.5Z' />
-                <path d='M6 10.5a.75.75 0 0 1 .75.75v1.5a5.25 5.25 0 1 0 10.5 0v-1.5a.75.75 0 0 1 1.5 0v1.5a6.751 6.751 0 0 1-6 6.709v2.291h3a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1 0-1.5h3v-2.291a6.751 6.751 0 0 1-6-6.709v-1.5A.75.75 0 0 1 6 10.5Z' />
-            </svg>
-
-            <button
-                className={`text-1xl py-2 px-3 rounded-3xl my-2 ${isRecording ? ' bg-red-500' : ' bg-secondary'}`}
-                onClick={hadleStartRecording}
-            >
-                {isRecording ? 'Stop Recording' : 'Start Recording'}
-            </button>
-            <div>{formatTime(seconds)}</div>
-            <div>
-                <audio src={mediaBlobUrl} controls />
+        <>
+            <div className='flex flex-col items-center'>
+                <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    viewBox='0 0 24 24'
+                    className={`size-24 ${isRecording ? ' fill-red-500' : ' fill-secondary'}`}
+                >
+                    <path d='M8.25 4.5a3.75 3.75 0 1 1 7.5 0v8.25a3.75 3.75 0 1 1-7.5 0V4.5Z' />
+                    <path d='M6 10.5a.75.75 0 0 1 .75.75v1.5a5.25 5.25 0 1 0 10.5 0v-1.5a.75.75 0 0 1 1.5 0v1.5a6.751 6.751 0 0 1-6 6.709v2.291h3a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1 0-1.5h3v-2.291a6.751 6.751 0 0 1-6-6.709v-1.5A.75.75 0 0 1 6 10.5Z' />
+                </svg>
+                <button
+                    className={`text-1xl py-2 px-3 rounded-3xl my-2 ${isRecording ? ' bg-red-500' : ' bg-secondary'}`}
+                    onClick={hadleStartRecording}
+                >
+                    {isRecording ? 'Stop Recording' : 'Start Recording'}
+                </button>
+                <div>{formatTime(seconds)}</div>
             </div>
-            <h2>Recordings:</h2>
-            <ul>
-                {recordings.map((recording: Recording, index: number) => (
-                    <li key={index}>{recording.id}</li>
-                ))}
-            </ul>
-        </div>
+            <div className='flex full-width flex-col'>
+                <h1 className='text-2xl'>Recordings:</h1>
+                <ul>
+                    {recordings.map((recording: Recording, index: number) => (
+                        <li  key={index} className='border p-2 mb-2'>
+                            {recording.name}
+                            <div>
+                                <audio src={recording.url} controls />
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </>
     );
 };
 

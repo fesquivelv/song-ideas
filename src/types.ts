@@ -10,6 +10,8 @@ interface SongIdea {
 
 interface Recording {
   id: string;
+  name: string;
+  description: string;
   ideaId: string;
   url: string;
   createdAt: string;

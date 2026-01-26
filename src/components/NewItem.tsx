@@ -1,22 +1,20 @@
 import { useState } from 'react';
-import type { SongIdea } from '../types';
 
 interface Props {
-  onAdd: (idea: Omit<SongIdea, 'id'>) => void;
+  onAdd: (name: string, description: string) => void;
 }
 
-export default function NewSongIdea({ onAdd }: Props) {
+export default function NewItem({ onAdd }: Props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({ name, description });
+    onAdd(name, description);
   };
 
   return (
     <div className="mx-auto max-w-7xl p-6 lg:px-8">
-      <h1 className="text-2xl font-bold mb-4">New Song Idea</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block">Name</label>

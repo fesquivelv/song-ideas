@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import type { SongIdea } from '../types';
 import ModalDialog from '../components/ModalDialog';
-import NewSongIdea from '../components/NewSongIdea';
 import { useState } from 'react';
+import NewItem from '../components/NewItem';
 
 interface Props {
     ideas: SongIdea[];
@@ -15,8 +15,13 @@ export default function SongIdeasList({ ideas, addIdea }: Props) {
     const handleCloseModal = () => setIsModalOpen(false);
     const handleOpenModal = () => setIsModalOpen(true);
 
-    const onAddIdea = (idea: Omit<SongIdea, 'id'>) => {
+    const onAddIdea = (name: string, description: string) => {
         setIsModalOpen(false);
+        const idea = {
+            id: Date.now().toString(),
+            name,
+            description,
+        };
         addIdea(idea);
     };
 
@@ -48,7 +53,7 @@ export default function SongIdeasList({ ideas, addIdea }: Props) {
                     onClose={handleCloseModal}
                     title='New Song Idea'
                 >
-                    <NewSongIdea onAdd={onAddIdea} />
+                    <NewItem onAdd={onAddIdea} />
                 </ModalDialog>
             </div>
         </>
