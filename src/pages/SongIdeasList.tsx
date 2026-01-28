@@ -1,28 +1,36 @@
 import { Link } from 'react-router-dom';
 import type { SongIdea } from '../types';
 import ModalDialog from '../components/ModalDialog';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import NewItem from '../components/NewItem';
+import { collection, addDoc } from "firebase/firestore";
+import { db } from '../firebase';
+import { useRealTimeData } from '../hooks/useRealTimeData';
 
-interface Props {
-    ideas: SongIdea[];
-    addIdea: (idea: Omit<SongIdea, 'id'>) => void;
-}
-
-export default function SongIdeasList({ ideas, addIdea }: Props) {
+export default function SongIdeasList() {
+    const { data: ideas, loading, error } = useRealTimeData<SongIdea>("songIdeas");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error.message}</p>;
+
+    
 
     const handleCloseModal = () => setIsModalOpen(false);
     const handleOpenModal = () => setIsModalOpen(true);
 
-    const onAddIdea = (name: string, description: string) => {
+    const onAddIdea = async (name: string, description: string) => {
         setIsModalOpen(false);
-        const idea = {
-            id: Date.now().toString(),
-            name,
-            description,
-        };
-        addIdea(idea);
+        try {
+            const docRef = await addDoc(collection(db, "songIdeas"), {
+                name: name,
+                description: description,
+                createdAt: new Date().toString(),
+            });
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
     };
 
     return (

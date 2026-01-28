@@ -4,7 +4,7 @@ import { useReactMediaRecorder } from 'react-media-recorder';
 
 interface Props {
     recordings: Recording[];
-    onStop?: (blobUrl: string) => void;
+    onStop?: (blobUrl: string, blob: Blob) => void;
 }
 
 const Recorder = ({ recordings, onStop }: Props) => {
@@ -14,7 +14,7 @@ const Recorder = ({ recordings, onStop }: Props) => {
             clearInterval(intervalRef.current);
             setSeconds(0);
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            onStop && mediaBlobUrl && onStop(mediaBlobUrl);
+            onStop && mediaBlobUrl && onStop(mediaBlobUrl, blob);
         },
     });
     const [seconds, setSeconds] = useState(0);

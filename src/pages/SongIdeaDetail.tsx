@@ -16,12 +16,14 @@ export default function SongIdeaDetail({ ideas }: Props) {
     const idea = ideas.find((i) => i.id === id);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [blobUrl, setBlobUrl] = useState<string>('');
+    const [blob, setBlob] = useState<Blob | null>(null);
 
     const handleCloseModal = () => setIsModalOpen(false);
     const handleOpenModal = () => setIsModalOpen(true);
 
-    const onStoppedRecording = (mediaBlobUrl: string) => {
+    const onStoppedRecording = (mediaBlobUrl: string, blob: Blob) => {
         setBlobUrl(mediaBlobUrl);
+        setBlob(blob);
         handleOpenModal();
     };
 

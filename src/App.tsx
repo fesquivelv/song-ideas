@@ -4,27 +4,26 @@ import SongIdeasList from './pages/SongIdeasList';
 import SongIdeaDetail from './pages/SongIdeaDetail';
 import type { SongIdea } from './types';
 import Layout from './components/Layout';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
     const [ideas, setIdeas] = useState<SongIdea[]>([]);
 
-    const addIdea = (idea: Omit<SongIdea, 'id'>) => {
-        const newIdea: SongIdea = { ...idea, id: Date.now().toString() };
-        setIdeas([...ideas, newIdea]);
-    };
+
 
     const updateIdea = (id: string, updated: Partial<SongIdea>) => {
         setIdeas(ideas.map((i) => (i.id === id ? { ...i, ...updated } : i)));
     };
 
     return (
-        <BrowserRouter>
+      <ErrorBoundary>
+         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route
                         path='/'
                         element={
-                            <SongIdeasList ideas={ideas} addIdea={addIdea} />
+                            <SongIdeasList />
                         }
                     />
                     <Route
@@ -39,6 +38,8 @@ function App() {
                 </Route>
             </Routes>
         </BrowserRouter>
+      </ErrorBoundary>
+       
     );
 }
 
