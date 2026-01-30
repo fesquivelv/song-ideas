@@ -2,10 +2,10 @@ interface SongIdea {
   id: string;
   name: string;
   description: string;
-  soloIdea?: string;
-  melodyIdea?: string;
-  lyrics?: string;
+  lyrics?: Lyrics[];
   recordings?: Recording[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Recording {
@@ -15,6 +15,16 @@ interface Recording {
   ideaId: string;
   url: string;
   createdAt: string;
+  updatedAt: string;
 }
 
-export type { SongIdea, Recording };
+interface Lyrics {
+  id: string;
+  content: string;
+  ideaId: string;
+  updatedAt: string;
+}
+
+export type CreateSongInput = Pick<SongIdea, 'name' | 'description'>;
+
+export type { SongIdea, Recording, Lyrics };

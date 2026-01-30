@@ -1,42 +1,43 @@
 import { Link } from 'react-router-dom';
 import type { SongIdea } from '../types';
 import ModalDialog from '../components/ModalDialog';
-import { use, useState } from 'react';
+import {  useState } from 'react';
 import NewItem from '../components/NewItem';
-import { collection, addDoc } from "firebase/firestore";
-import { db } from '../firebase';
-import { useRealTimeData } from '../hooks/useRealTimeData';
+import { useQuery } from '@tanstack/react-query';
+import { fetchSongIdeasList } from '../api/songIdeasApi';
+import { useCreateSong } from '../hooks/useCreateSongIdea';
 
 export default function SongIdeasList() {
-    const { data: ideas, loading, error } = useRealTimeData<SongIdea>("songIdeas");
+    const { data: ideas = [], error, isLoading: loading } = useQuery<SongIdea[], Error>({
+        queryKey:['songIdeas'],
+        queryFn:fetchSongIdeasList
+    });
+
+    const { mutate, isPending, isError } = useCreateSong();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error.message}</p>;
-
-    
 
     const handleCloseModal = () => setIsModalOpen(false);
     const handleOpenModal = () => setIsModalOpen(true);
 
     const onAddIdea = async (name: string, description: string) => {
+        mutate({ name, description }, {
+            onSuccess() {
+                alert('Song idea created successfully!');
+            },
+        });
         setIsModalOpen(false);
-        try {
-            const docRef = await addDoc(collection(db, "songIdeas"), {
-                name: name,
-                description: description,
-                createdAt: new Date().toString(),
-            });
-            console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-            console.error("Error adding document: ", e);
-        }
     };
 
     return (
         <>
             <div>
                 <h1 className='text-2xl font-bold mb-4'>Song Ideas</h1>
+                {isPending ? 'Saving...' : ''}
+                {isError && <p className="text-red-400 text-sm">Oops! Something went wrong.</p>}
                 <button
                     className='bg-primary  px-4 py-2 rounded'
                     onClick={handleOpenModal}
@@ -67,3 +68,4 @@ export default function SongIdeasList() {
         </>
     );
 }
+
