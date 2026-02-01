@@ -1,6 +1,6 @@
-import type { CreateSongInput } from "../types";
+import type { CreateRecordingInput, CreateSongInput } from "../types";
 
-const baseUrl = 'http://localhost:5000/api';
+const baseUrl = 'http://localhost:3000/api';
 
 export const fetchSongIdeaDetail = async (id: string) => {
     const res = await fetch(`${baseUrl}/song-ideas/${id}`);
@@ -29,6 +29,25 @@ export const createSongIdea = async (newSong: CreateSongInput) => {
     });
     if (!res.ok) {
         throw new Error('Failed to create song idea');
+    }
+    return res.json();
+}
+
+export const createRecording = async (input: CreateRecordingInput) => {
+    const { ideaId, name, description, blob } = input;
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('ideaId', ideaId);
+    formData.append('audio', blob, 'recording.webm');
+
+    const res = await fetch(`${baseUrl}/recordings/upload`, {
+        method: 'POST',
+        body: formData,
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to create recording');
     }
     return res.json();
 }

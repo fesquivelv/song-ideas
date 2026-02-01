@@ -27,4 +27,6 @@ interface Lyrics {
 
 export type CreateSongInput = Pick<SongIdea, 'name' | 'description'>;
 
+export type CreateRecordingInput = Pick<Recording, 'name' | 'description' | 'ideaId'> & { blob: Blob };
+
 export type { SongIdea, Recording, Lyrics };

@@ -36,7 +36,6 @@ export default function SongIdeasList() {
         <>
             <div>
                 <h1 className='text-2xl font-bold mb-4'>Song Ideas</h1>
-                {isPending ? 'Saving...' : ''}
                 {isError && <p className="text-red-400 text-sm">Oops! Something went wrong.</p>}
                 <button
                     className='bg-primary  px-4 py-2 rounded'
@@ -62,7 +61,7 @@ export default function SongIdeasList() {
                     onClose={handleCloseModal}
                     title='New Song Idea'
                 >
-                    <NewItem onAdd={onAddIdea} />
+                    <NewItem onAdd={onAddIdea} acceptButtonText={isPending ? "Saving..." : 'Save'}/>
                 </ModalDialog>
             </div>
         </>

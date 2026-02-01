@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import type { Recording } from '../types';
 import { useReactMediaRecorder } from 'react-media-recorder';
+import { useAudioStore } from '../store/useAudioStore';
 
 interface Props {
     recordings: Recording[];
-    onStop?: (blobUrl: string, blob: Blob) => void;
+    onStop?: (blob: Blob) => void;
 }
 
 const Recorder = ({ recordings, onStop }: Props) => {
@@ -14,7 +15,7 @@ const Recorder = ({ recordings, onStop }: Props) => {
             clearInterval(intervalRef.current);
             setSeconds(0);
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            onStop && mediaBlobUrl && onStop(mediaBlobUrl, blob);
+            onStop && mediaBlobUrl && onStop(blob);
         },
     });
     const [seconds, setSeconds] = useState(0);
@@ -28,7 +29,10 @@ const Recorder = ({ recordings, onStop }: Props) => {
         }, 1000);
     };
 
-    const stopTimer = () => {};
+    const stopTimer = () => {
+        clearInterval(intervalRef.current);
+        setSeconds(0);
+    };
 
     const hadleStartRecording = () => {
         if (!isRecording) {
@@ -52,6 +56,8 @@ const Recorder = ({ recordings, onStop }: Props) => {
         return `${formattedMinutes}:${formattedSeconds}`;
     };
 
+    const playRecording = useAudioStore((state) => state.play);
+
     return (
         <>
             <div className='flex flex-col items-center'>
@@ -74,12 +80,14 @@ const Recorder = ({ recordings, onStop }: Props) => {
             <div className='flex full-width flex-col'>
                 <h1 className='text-2xl'>Recordings:</h1>
                 <ul>
-                    {recordings.map((recording: Recording, index: number) => (
-                        <li  key={index} className='border p-2 mb-2'>
-                            {recording.name}
-                            <div>
-                                <audio src={recording.url} controls />
-                            </div>
+                    {recordings.map((rec: Recording, index: number) => (
+                        <li key={index} className='border p-2 mb-2'>
+                            <button
+                                onClick={() => playRecording(rec)}
+                                className='hover:text-indigo-400 transition-colors'
+                            >
+                                🎵 {rec.name || 'Untitled Take'}
+                            </button>
                         </li>
                     ))}
                 </ul>
