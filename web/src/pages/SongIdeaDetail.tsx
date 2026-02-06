@@ -6,16 +6,22 @@ import { useState } from 'react';
 import NewItem from '../components/NewItem';
 import { useSongIdea } from '../hooks/useSongIdea';
 import { useAddRecording } from '../hooks/useAddRecording';
+import Lyrics from '../components/Lyrics';
 
 export default function SongIdeaDetail() {
     const { id } = useParams<{ id: string }>();
     const { data: idea, isLoading, isError, error } = useSongIdea(id!);
     const { mutate, isPending } = useAddRecording();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddRecordingModalOpen, setIsAddRecordingModalOpen] = useState(false);
+    const [isAddLyricModalOpen, setIsAddLyricModalOpen] = useState(false);
     const [blob, setBlob] = useState<Blob | null>(null);
 
-    const handleCloseModal = () => setIsModalOpen(false);
-    const handleOpenModal = () => setIsModalOpen(true);
+    const handleCloseAddRecordingModal = () => setIsAddRecordingModalOpen(false);
+    const handleOpenAddRecordingModal = () => setIsAddRecordingModalOpen(true);
+
+    const handleCloseAddLyricModal = () => setIsAddLyricModalOpen(false);
+    const handleOpenAddLyricModal = () => {setIsAddLyricModalOpen(true);
+    }
 
     if (isLoading)
         return (
@@ -34,7 +40,7 @@ export default function SongIdeaDetail() {
 
     const onStoppedRecording = (blob: Blob) => {
         setBlob(blob);
-        handleOpenModal();
+        handleOpenAddRecordingModal();
     };
 
     const addRecording = async (name: string, description: string) => {
@@ -48,11 +54,17 @@ export default function SongIdeaDetail() {
             {
                 onSuccess() {
                     alert('Recording added successfully!');
-                    handleCloseModal();
+                    handleCloseAddRecordingModal();
                 },
             },
         );
     };
+
+    const addLyric = async (title: string, content: string) => {
+        // Implement the logic to add a new lyric here
+        alert(`Lyric titled "${title}" added successfully!`);
+        handleCloseAddLyricModal();
+    }
 
     const tabs: { label: string; content: React.ReactNode }[] = [
         {
@@ -66,7 +78,7 @@ export default function SongIdeaDetail() {
         },
         {
             label: 'Lyrics',
-            content: <div>Lyrics content for {idea?.name}</div>,
+            content: <Lyrics lyrics={idea?.lyrics || []} onOpenAddLyricModal={handleOpenAddLyricModal}/>,
         },
     ];
 
@@ -76,11 +88,18 @@ export default function SongIdeaDetail() {
             <div>{idea?.description}</div>
             <Tabs tabs={tabs} />
             <ModalDialog
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
+                isOpen={isAddRecordingModalOpen}
+                onClose={handleCloseAddRecordingModal}
                 title='New Song Idea'
             >
                 <NewItem onAdd={addRecording} acceptButtonText={isPending ? "Saving..." : 'Save'}/>
+            </ModalDialog>
+            <ModalDialog
+                isOpen={isAddLyricModalOpen}
+                onClose={handleCloseAddLyricModal}
+                title='New Lyric Idea'
+            >
+                <NewItem onAdd={addLyric} acceptButtonText={isPending ? "Saving..." : 'Save'}/>
             </ModalDialog>
         </>
     );

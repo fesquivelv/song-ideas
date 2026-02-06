@@ -2,7 +2,7 @@ interface SongIdea {
   id: string;
   name: string;
   description: string;
-  lyrics?: Lyrics[];
+  lyrics?: Lyric[];
   recordings?: Recording[];
   createdAt: string;
   updatedAt: string;
@@ -18,8 +18,9 @@ interface Recording {
   updatedAt: string;
 }
 
-interface Lyrics {
+interface Lyric {
   id: string;
+  title: string;
   content: string;
   ideaId: string;
   updatedAt: string;
@@ -29,4 +30,6 @@ export type CreateSongInput = Pick<SongIdea, 'name' | 'description'>;
 
 export type CreateRecordingInput = Pick<Recording, 'name' | 'description' | 'ideaId'> & { blob: Blob };
 
-export type { SongIdea, Recording, Lyrics };
+export type CreateLyricsInput = Pick<Lyric, 'content' | 'ideaId'>;
+
+export type { SongIdea, Recording, Lyric };

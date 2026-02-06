@@ -1,4 +1,4 @@
-import type { CreateRecordingInput, CreateSongInput } from "../types";
+import type { CreateLyricsInput, CreateRecordingInput, CreateSongInput } from "../types";
 
 const baseUrl = 'http://localhost:3000/api';
 
@@ -48,6 +48,20 @@ export const createRecording = async (input: CreateRecordingInput) => {
 
     if (!res.ok) {
         throw new Error('Failed to create recording');
+    }
+    return res.json();
+}
+
+export const createLyric = async (input: CreateLyricsInput) => {
+    const res = await fetch(`${baseUrl}/lyrics`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(input),
+    }); 
+    if (!res.ok) {
+        throw new Error('Failed to create lyric');
     }
     return res.json();
 }
