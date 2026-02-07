@@ -7,11 +7,13 @@ import NewItem from '../components/NewItem';
 import { useSongIdea } from '../hooks/useSongIdea';
 import { useAddRecording } from '../hooks/useAddRecording';
 import Lyrics from '../components/Lyrics';
+import { useAddLyric } from '../hooks/useAddLyric';
 
 export default function SongIdeaDetail() {
     const { id } = useParams<{ id: string }>();
     const { data: idea, isLoading, isError, error } = useSongIdea(id!);
     const { mutate, isPending } = useAddRecording();
+    const { mutate: addLyricMutate, isPending: isAddLyricPending } = useAddLyric();
     const [isAddRecordingModalOpen, setIsAddRecordingModalOpen] = useState(false);
     const [isAddLyricModalOpen, setIsAddLyricModalOpen] = useState(false);
     const [blob, setBlob] = useState<Blob | null>(null);
@@ -60,11 +62,19 @@ export default function SongIdeaDetail() {
         );
     };
 
-    const addLyric = async (title: string, content: string) => {
-        // Implement the logic to add a new lyric here
-        alert(`Lyric titled "${title}" added successfully!`);
-        handleCloseAddLyricModal();
-    }
+    const addLyric = async (name: string, description: string) => {
+        addLyricMutate({
+            ideaId: idea.id,
+            title: name,
+            content: description,
+        },
+        {
+            onSuccess() {
+                alert('Lyric added successfully!');
+                handleCloseAddLyricModal();
+            }
+    });
+}
 
     const tabs: { label: string; content: React.ReactNode }[] = [
         {
@@ -99,7 +109,7 @@ export default function SongIdeaDetail() {
                 onClose={handleCloseAddLyricModal}
                 title='New Lyric Idea'
             >
-                <NewItem onAdd={addLyric} acceptButtonText={isPending ? "Saving..." : 'Save'}/>
+                <NewItem onAdd={addLyric} acceptButtonText={isAddLyricPending ? "Saving..." : 'Save'}/>
             </ModalDialog>
         </>
     );

@@ -30,6 +30,6 @@ export type CreateSongInput = Pick<SongIdea, 'name' | 'description'>;
 
 export type CreateRecordingInput = Pick<Recording, 'name' | 'description' | 'ideaId'> & { blob: Blob };
 
-export type CreateLyricsInput = Pick<Lyric, 'content' | 'ideaId'>;
+export type CreateLyricsInput = Pick<Lyric,'title' | 'content' | 'ideaId'>;
 
 export type { SongIdea, Recording, Lyric };

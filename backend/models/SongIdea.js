@@ -19,6 +19,7 @@ const songIdeaSchema = new mongoose.Schema({
     {
       id: String,
       content: String,
+      title: String,
       updatedAt: String
     }
   ],

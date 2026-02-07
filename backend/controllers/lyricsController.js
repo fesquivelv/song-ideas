@@ -5,20 +5,22 @@ const SongIdea = require('../models/SongIdea');
 // Create new lyrics
 exports.createLyrics = async (req, res) => {
   try {
-    const { content, ideaId } = req.body;
+    const { content, ideaId, title } = req.body;
 
+    console.log('body:', req.body);
     if (!content || !ideaId) {
       return res.status(400).json({ message: 'Content and ideaId are required' });
     }
 
     // Verify song idea exists
-    const songIdea = await SongIdea.findOne({ id: ideaId });
+    const songIdea = await SongIdea.findOne({ ideaId });
     if (!songIdea) {
       return res.status(404).json({ message: 'Song idea not found' });
     }
 
     const newLyrics = new Lyrics({
       id: uuidv4(),
+      title,
       content,
       ideaId,
       updatedAt: new Date().toISOString()
@@ -26,9 +28,14 @@ exports.createLyrics = async (req, res) => {
 
     await newLyrics.save();
 
+    if (songIdea.lyrics.length === 0) {
+      songIdea.lyrics = [];
+    }
+
     // Add lyrics to song idea
     songIdea.lyrics.push({
       id: newLyrics.id,
+      title: newLyrics.title,
       content: newLyrics.content,
       updatedAt: newLyrics.updatedAt
     });
@@ -99,6 +106,7 @@ exports.updateLyrics = async (req, res) => {
         songIdea.lyrics[lyricsIndex] = {
           id: lyrics.id,
           content: lyrics.content,
+          title: lyrics.title,
           updatedAt: lyrics.updatedAt
         };
         await songIdea.save();

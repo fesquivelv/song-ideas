@@ -1,0 +1,16 @@
+{
+  "name": "song-ideas-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["backend", "web"],
+  "scripts": {
+    "start:backend": "npm --prefix backend run start",
+    "start:backend:dev": "npm --prefix backend run dev",
+    "start:web": "npm --prefix web run dev",
+    "start": "concurrently \"npm --prefix backend run start\" \"npm --prefix web run dev\"",
+    "dev": "concurrently -k \"npm --prefix backend run dev\" \"npm --prefix web run dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
