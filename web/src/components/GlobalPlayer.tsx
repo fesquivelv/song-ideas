@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { useAudioStore } from '../store/useAudioStore';
 import { PauseIcon, PlayIcon, StopIcon } from './Icons';
+import { formatTime } from '../utils';
 
 export const GlobalPlayer = () => {
     const { activeRecording, isPlaying, pause, resume, stop } = useAudioStore();
@@ -95,10 +96,5 @@ export const GlobalPlayer = () => {
     );
 };
 
-// Helper function to format seconds into 0:00
-const formatTime = (time: number) => {
-    if (isNaN(time)) return '0:00';
-    const mins = Math.floor(time / 60);
-    const secs = Math.floor(time % 60);
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-};
+
+

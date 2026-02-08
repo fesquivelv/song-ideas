@@ -6,14 +6,12 @@ const SongIdea = require('../models/SongIdea');
 exports.createLyrics = async (req, res) => {
   try {
     const { content, ideaId, title } = req.body;
-
-    console.log('body:', req.body);
     if (!content || !ideaId) {
       return res.status(400).json({ message: 'Content and ideaId are required' });
     }
 
     // Verify song idea exists
-    const songIdea = await SongIdea.findOne({ ideaId });
+    const songIdea = await SongIdea.findOne({ id: ideaId });
     if (!songIdea) {
       return res.status(404).json({ message: 'Song idea not found' });
     }

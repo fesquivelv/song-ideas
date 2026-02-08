@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import type { Recording } from '../types';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { useAudioStore } from '../store/useAudioStore';
+import { formatDate } from '../utils';
 
 interface Props {
     recordings: Recording[];
@@ -88,6 +89,9 @@ const Recorder = ({ recordings, onStop }: Props) => {
                             >
                                 🎵 {rec.name || 'Untitled Take'}
                             </button>
+                            <div className='text-secondary text-sm'>
+                                {formatDate(rec.updatedAt)}
+                            </div>
                         </li>
                     ))}
                 </ul>
