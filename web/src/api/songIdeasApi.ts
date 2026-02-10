@@ -1,6 +1,6 @@
 import type { CreateLyricsInput, CreateRecordingInput, CreateSongInput } from "../types";
 
-const baseUrl = 'http://localhost:3000/api';
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const fetchSongIdeaDetail = async (id: string) => {
     const res = await fetch(`${baseUrl}/song-ideas/${id}`);
