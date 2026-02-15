@@ -7,18 +7,19 @@ services:
             - ./web:/app
             - /app/node_modules
         environment:
-            - VITE_API_URL=http://localhost:5000/api
+            - VITE_API_URL=http://localhost:3000/api
         depends_on:
             - backend
 
     backend:
         build: ./backend
         ports:
-            - '5000:5000'
+            - '3000:3000'
         volumes:
             - ./backend/uploads:/app/uploads
         environment:
             - MONGODB_URI=mongodb://db:27017/song-ideas
+            - PORT=3000
         depends_on:
             - db
 

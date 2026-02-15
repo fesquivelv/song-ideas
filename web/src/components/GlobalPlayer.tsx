@@ -3,6 +3,8 @@ import { useAudioStore } from '../store/useAudioStore';
 import { PauseIcon, PlayIcon, StopIcon } from './Icons';
 import { formatTime } from '../utils';
 
+const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3000';
+
 export const GlobalPlayer = () => {
     const { activeRecording, isPlaying, pause, resume, stop } = useAudioStore();
     const audioRef = useRef<HTMLAudioElement>(null);
@@ -86,7 +88,7 @@ export const GlobalPlayer = () => {
             </div>
             <audio
                 ref={audioRef}
-                src={`http://localhost:5000${activeRecording.url}`}
+                src={`${baseUrl}${activeRecording.url}`}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleTimeUpdate}
                 onEnded={pause}
@@ -94,6 +96,3 @@ export const GlobalPlayer = () => {
         </div>
     );
 };
-
-
-
