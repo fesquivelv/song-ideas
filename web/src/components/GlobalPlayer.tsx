@@ -84,10 +84,9 @@ export const GlobalPlayer = () => {
                     </div>
                 </div>
             </div>
-
             <audio
                 ref={audioRef}
-                src={`http://localhost:3000${activeRecording.url}`}
+                src={`http://localhost:5000${activeRecording.url}`}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleTimeUpdate}
                 onEnded={pause}

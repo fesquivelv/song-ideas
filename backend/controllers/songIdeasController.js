@@ -17,7 +17,6 @@ exports.getSongIdeaById = async (req, res) => {
   try {
     const { id } = req.params;
     const songIdea = await SongIdea.findOne({ id });
-    console.log('Fetched song idea:', songIdea);
 
     if (!songIdea) {
       return res.status(404).json({ message: 'Song idea not found' });

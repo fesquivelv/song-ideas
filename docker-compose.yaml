@@ -1,28 +1,31 @@
-version: '3.8'
-
 services:
     frontend:
         build: ./web
         ports:
-            - '5173/5173'
+            - '5173:5173'
+        volumes:
+            - ./web:/app
+            - /app/node_modules
         environment:
-            - VITE_API_URL=http://localhost:500/api
+            - VITE_API_URL=http://localhost:5000/api
         depends_on:
             - backend
 
     backend:
         build: ./backend
         ports:
-            - '5000/5000'
+            - '5000:5000'
+        volumes:
+            - ./backend/uploads:/app/uploads
         environment:
-            - MONGO_URI=mongodb://db:27017/song-ideas
+            - MONGODB_URI=mongodb://db:27017/song-ideas
         depends_on:
             - db
 
-    db:build:
+    db:
         image: mongo:latest
         ports:
-            - '27017/27017'
+            - '27017:27017'
         volumes:
             - mongo-data:/data/db
 
