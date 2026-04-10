@@ -11,10 +11,4 @@ router.get('/:id', songIdeasController.getSongIdeaById);
 // Create a new song idea
 router.post('/', songIdeasController.createSongIdea);
 
-// Update a song idea
-router.put('/:id', songIdeasController.updateSongIdea);
-
-// Delete a song idea
-router.delete('/:id', songIdeasController.deleteSongIdea);
-
 module.exports = router;

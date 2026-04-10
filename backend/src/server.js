@@ -2,18 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const connectDB = require('./config/database');
 
 // Import routes
 const songIdeasRoutes = require('./routes/songIdeas');
-const recordingsRoutes = require('./routes/recordings');
-const lyricsRoutes = require('./routes/lyrics');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
-connectDB();
 
 // Middleware
 app.use(cors({
@@ -29,8 +24,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/song-ideas', songIdeasRoutes);
-app.use('/api/recordings', recordingsRoutes);
-app.use('/api/lyrics', lyricsRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

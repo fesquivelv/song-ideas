@@ -16,19 +16,36 @@ services:
         ports:
             - '3000:3000'
         volumes:
+            - ./backend:/app
+            - /app/node_modules
             - ./backend/uploads:/app/uploads
+
+        env_file:
+            - ./backend/.env
         environment:
-            - MONGODB_URI=mongodb://db:27017/song-ideas
+            - DATABASE_URL=postgresql://user:password@db:5432/songIdeasDb?schema=public
             - PORT=3000
         depends_on:
-            - db
+            db:
+                condition: service_healthy
 
     db:
-        image: mongo:latest
+        image: postgres:15-alpine
+        platform: linux/arm64
+        restart: always
+        environment:
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=songIdeasDb
         ports:
-            - '27017:27017'
+            - '5432:5432'
         volumes:
-            - mongo-data:/data/db
+            - postgres-data:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U user -d songIdeasDb']
+            interval: 5s
+            timeout: 5s
+            retries: 5
 
 volumes:
-    mongo-data:
+    postgres-data:
