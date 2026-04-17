@@ -8,6 +8,7 @@ require ('./models/index'); // Importa el modelo para que Sequelize lo reconozca
 // Import routes
 const songIdeasRoutes = require('./routes/songIdeas');
 const lyricsRoutes = require('./routes/lyrics');
+const recordingsRoutes = require('./routes/recordings');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Routes
 app.use('/api/song-ideas', songIdeasRoutes);
 app.use('/api/lyrics', lyricsRoutes);
+app.use('/api/recordings', recordingsRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

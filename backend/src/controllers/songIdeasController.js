@@ -17,6 +17,7 @@ const getAllSongIdeas = async (req, res) => {
             ],
             order: [['createdAt', 'DESC']]
         });
+        console.log('Fetched song ideas:', songIdeas);
         res.status(200).json(songIdeas);    
 
     } catch (error) {

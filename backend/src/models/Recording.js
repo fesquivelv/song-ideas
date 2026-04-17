@@ -16,7 +16,7 @@ const Recording = sequelize.define('Recording', {
     type: DataTypes.TEXT,
     defaultValue: ''
   },
-  song_idea_id: {
+  ideaId: {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
