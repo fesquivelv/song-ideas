@@ -1,36 +1,31 @@
 import type { CreateLyricsInput, CreateRecordingInput, CreateSongInput } from "../types";
+import client from "./client";
 
 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export const fetchSongIdeaDetail = async (id: string) => {
-    const res = await fetch(`${baseUrl}/song-ideas/${id}`);
-    if (!res.ok) {
+    const res = await client.get(`$/song-ideas/${id}`);
+    if (res.status !== 200) {
         throw new Error('Failed to fetch song idea detail');
-    }
-    return res.json();
+    } 
+    return res.data;
 };
 
 
 export const fetchSongIdeasList = async () => {
-    const res = await fetch(`${baseUrl}/song-ideas`);
-    if (!res.ok) {
+    const res = await client.get(`$/song-ideas`);
+    if (res.status !== 200) {
         throw new Error('Failed to fetch song ideas list');
     }
-    return res.json();
+    return res.data;
 }
 
 export const createSongIdea = async (newSong: CreateSongInput) => {
-    const res = await fetch(`${baseUrl}/song-ideas`, {
-        method: 'POST', 
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newSong),
-    });
-    if (!res.ok) {
+    const res = await client.post(`$/song-ideas`, newSong);
+    if (res.status !== 201) {
         throw new Error('Failed to create song idea');
     }
-    return res.json();
+    return res.data;
 }
 
 export const createRecording = async (input: CreateRecordingInput) => {
@@ -41,28 +36,22 @@ export const createRecording = async (input: CreateRecordingInput) => {
     formData.append('ideaId', ideaId);
     formData.append('audio', blob, 'recording.webm');
 
-    const res = await fetch(`${baseUrl}/recordings/upload`, {
-        method: 'POST',
-        body: formData,
+    const res = await client.post(`$/recordings`, formData, {   
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
     });
-
-    if (!res.ok) {
+    if (res.status !== 201) {
         throw new Error('Failed to create recording');
     }
-    return res.json();
+    return res.data;
 }
 
 export const createLyric = async (input: CreateLyricsInput) => {
-    const res = await fetch(`${baseUrl}/lyrics`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(input),
-    }); 
-    if (!res.ok) {
+    const res = await client.post(`$/lyrics`, input); 
+    if (res.status !== 201) {
         throw new Error('Failed to create lyric');
     }
-    return res.json();
+    return res.data;
 }
 
