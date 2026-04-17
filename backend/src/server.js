@@ -5,10 +5,12 @@ const path = require('path');
 const sequelize = require('./db');
 require ('./models/index'); // Importa el modelo para que Sequelize lo reconozca
 
+
 // Import routes
 const songIdeasRoutes = require('./routes/songIdeas');
 const lyricsRoutes = require('./routes/lyrics');
 const recordingsRoutes = require('./routes/recordings');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;

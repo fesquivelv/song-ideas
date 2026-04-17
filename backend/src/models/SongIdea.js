@@ -15,6 +15,14 @@ const SongIdea = sequelize.define('SongIdea', {
   description: {
     type: DataTypes.TEXT,
     defaultValue: ''
+  },
+  userId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'id'
+    }
   }
 }, {
   tableName: 'song_ideas',

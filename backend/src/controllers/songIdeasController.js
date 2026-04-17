@@ -7,6 +7,7 @@ const Lyrics = require('../models/Lyrics');
 const getAllSongIdeas = async (req, res) => {
     try {
         const songIdeas = await SongIdea.findAll({
+            where: { userId: req.user.id },
             include: [
                 {
                     model: Recording, as: 'recordings'
@@ -55,7 +56,7 @@ const getAllSongIdeas = async (req, res) => {
  const createSongIdea = async (req, res) => {
     try {
         const { name, description } = req.body;
-        const newSongIdea = await SongIdea.create({ name, description });
+        const newSongIdea = await SongIdea.create({ name, description, userId: req.user.id });
         res.status(201).json(newSongIdea);
     } catch (error) {
         console.error('Error creating song idea:', error);
