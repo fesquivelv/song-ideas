@@ -1,6 +1,13 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 const Layout = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login', { replace: true });
+    }
+    
     return (
         <>
             <header className='bg-primary'>
@@ -8,7 +15,12 @@ const Layout = () => {
                     <Link to='/' className='text-xl font-bold'>
                         Song Ideas App
                     </Link>
-                    <div>Log in</div>
+                    <button
+                        onClick={handleLogout}
+                        className="px-3 py-1.5 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-400/10 transition-all"
+                    >
+                        Log out
+                    </button>
                 </nav>
             </header>
             <div className='mx-auto max-w-7xl p-6 lg:px-8'>

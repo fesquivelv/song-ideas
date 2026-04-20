@@ -5,9 +5,10 @@ const Lyrics = require('../models/Lyrics');
 
 // Get all song ideas
 const getAllSongIdeas = async (req, res) => {
+    console.log('User ID from token:', req.user); // Agregar un log para verificar el ID del usuario
     try {
         const songIdeas = await SongIdea.findAll({
-            where: { userId: req.user.id },
+            where: { userId: req.user.userId }, // Filtrar por el ID del usuario autenticado
             include: [
                 {
                     model: Recording, as: 'recordings'
@@ -56,7 +57,7 @@ const getAllSongIdeas = async (req, res) => {
  const createSongIdea = async (req, res) => {
     try {
         const { name, description } = req.body;
-        const newSongIdea = await SongIdea.create({ name, description, userId: req.user.id });
+        const newSongIdea = await SongIdea.create({ name, description, userId: req.user.userId });
         res.status(201).json(newSongIdea);
     } catch (error) {
         console.error('Error creating song idea:', error);

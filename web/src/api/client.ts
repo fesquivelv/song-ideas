@@ -11,7 +11,7 @@ client.interceptors.request.use(
     (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
         const token = localStorage.getItem('token');
 
-        if (token && config.headers) {
+        if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
 
@@ -20,6 +20,18 @@ client.interceptors.request.use(
     (error) => {
         return Promise.reject(error);
     }
+);
+
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Si el servidor responde 401, el token no es válido o expiró
+      localStorage.removeItem('token');
+      window.location.href = '/login'; // Forzamos el salto al login
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default client;

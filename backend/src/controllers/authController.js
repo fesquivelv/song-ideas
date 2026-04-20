@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 
 const register = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await User.create({ username, password });
+        const { email, password } = req.body;
+        const user = await User.create({ email, password });
         res.status(201).json({ message: 'User registered successfully', userId: user.id });
     } catch (error) {
         console.error('Error registering user:', error);
@@ -14,14 +14,14 @@ const register = async (req, res) => {
 
 const Login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ where: { username } });
+        const { email, password } = req.body;
+        const user = await User.findOne({ where: { email } });
 
         if (!user || !(await user.validPassword(password))) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24' });
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || 'sercret_key', { expiresIn: '24h' });
 
         res.json({ token });
     } catch (error) {

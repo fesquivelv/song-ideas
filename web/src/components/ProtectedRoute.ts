@@ -1,14 +1,18 @@
-import type { JSX } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
-    if (!token) {
-        Navigate( { to: '/login',replace: true });
-    }
+    useEffect(() => {
+        if (!token) {
+            navigate("/login", { replace: true });
+        }
+    }, [token, navigate]);
 
     return children;
+
 }
 
 export default ProtectedRoute;

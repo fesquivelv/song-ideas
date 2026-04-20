@@ -10,6 +10,7 @@ require ('./models/index'); // Importa el modelo para que Sequelize lo reconozca
 const songIdeasRoutes = require('./routes/songIdeas');
 const lyricsRoutes = require('./routes/lyrics');
 const recordingsRoutes = require('./routes/recordings');
+const authRoutes = require('./routes/auth');
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/song-ideas', songIdeasRoutes);
 app.use('/api/lyrics', lyricsRoutes);
 app.use('/api/recordings', recordingsRoutes);
+app.use('/api/auth', authRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
