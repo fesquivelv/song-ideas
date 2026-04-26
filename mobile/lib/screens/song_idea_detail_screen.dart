@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/song_idea.dart';
 import '../services/database_service.dart';
-import '../widgets/chord_sequence_widget.dart';
 import '../widgets/lyrics_widget.dart';
 import '../widgets/recording_widget.dart';
 
@@ -123,7 +122,6 @@ class _SongIdeaDetailScreenState extends State<SongIdeaDetailScreen> {
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.mic), text: 'Recordings'),
-              Tab(icon: Icon(Icons.piano), text: 'Chords'),
               Tab(icon: Icon(Icons.text_fields), text: 'Lyrics'),
             ],
           ),
@@ -144,10 +142,6 @@ class _SongIdeaDetailScreenState extends State<SongIdeaDetailScreen> {
               child: TabBarView(
                 children: [
                   RecordingWidget(
-                    songIdea: _songIdea!,
-                    onUpdate: _loadSongIdea,
-                  ),
-                  ChordSequenceWidget(
                     songIdea: _songIdea!,
                     onUpdate: _loadSongIdea,
                   ),

@@ -20,7 +20,7 @@ const SongIdea = sequelize.define('SongIdea', {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'Users',
+      model: 'users',
       key: 'id'
     }
   }

@@ -53,7 +53,7 @@ app.use((err, req, res, next) => {
 
 async function startServer() {
   try {
-    await sequelize.sync({ alter: true }); // Sincroniza los modelos con la base de datos
+    await sequelize.sync({ alter: false }); // Sincroniza los modelos con la base de datos
     console.log('Database synchronized successfully.');
 
     app.listen(PORT, () => { 

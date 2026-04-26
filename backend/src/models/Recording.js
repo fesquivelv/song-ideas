@@ -16,6 +16,14 @@ const Recording = sequelize.define('Recording', {
     type: DataTypes.TEXT,
     defaultValue: ''
   },
+  chords: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  notes: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
   ideaId: {
     type: DataTypes.UUID,
     allowNull: false,

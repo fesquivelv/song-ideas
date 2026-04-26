@@ -122,8 +122,9 @@ class _RecordingWidgetState extends State<RecordingWidget> {
       final recording = Recording(
         songIdeaId: widget.songIdea.id!,
         filePath: filePath,
-        title: result['title']!.isEmpty ? null : result['title'],
-        notes: result['notes']!.isEmpty ? null : result['notes'],
+        name: result['name']!.isEmpty ? null : result['name'],
+        description: result['description']!.isEmpty ? null : result['description'],
+        chords: result['chords']!.isEmpty ? null : result['chords'],
         durationSeconds: duration,
         createdAt: DateTime.now(),
       );
@@ -243,15 +244,15 @@ class _RecordingWidgetState extends State<RecordingWidget> {
                             ),
                           ),
                           title: Text(
-                            recording.title ?? 'Recording ${index + 1}',
+                            recording.name ?? 'Recording ${index + 1}',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (recording.notes != null) ...[
+                              if (recording.description != null) ...[
                                 const SizedBox(height: 4),
-                                Text(recording.notes!),
+                                Text(recording.description!),
                               ],
                               const SizedBox(height: 4),
                               Row(

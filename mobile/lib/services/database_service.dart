@@ -107,12 +107,10 @@ class DatabaseService {
     final songIdea = SongIdea.fromMap(maps.first);
 
     // Load related data
-    final chordSequences = await getChordSequencesForSong(id);
     final lyricsIdeas = await getLyricsIdeasForSong(id);
     final recordings = await getRecordingsForSong(id);
 
     return songIdea.copyWith(
-      chordSequences: chordSequences,
       lyricsIdeas: lyricsIdeas,
       recordings: recordings,
     );
@@ -132,40 +130,6 @@ class DatabaseService {
     final db = await database;
     return await db.delete('song_ideas', where: 'id = ?', whereArgs: [id]);
   }
-
-  // Chord Sequences CRUD
-  Future<int> createChordSequence(ChordSequence chordSequence) async {
-    final db = await database;
-    final id = await db.insert('chord_sequences', chordSequence.toMap());
-    await updateSongIdeaUpdatedTime(chordSequence.songIdeaId);
-    return id;
-  }
-
-  Future<List<ChordSequence>> getChordSequencesForSong(int songIdeaId) async {
-    final db = await database;
-    final maps = await db.query(
-      'chord_sequences',
-      where: 'song_idea_id = ?',
-      whereArgs: [songIdeaId],
-      orderBy: 'created_at DESC',
-    );
-    return maps.map((map) => ChordSequence.fromMap(map)).toList();
-  }
-
-  Future<int> deleteChordSequence(int id) async {
-    final db = await database;
-    final maps = await db.query(
-      'chord_sequences',
-      where: 'id = ?',
-      whereArgs: [id],
-      limit: 1,
-    );
-    if (maps.isEmpty) return 0;
-    final chordSequence = ChordSequence.fromMap(maps.first);
-    await updateSongIdeaUpdatedTime(chordSequence.songIdeaId);
-    return await db.delete('chord_sequences', where: 'id = ?', whereArgs: [id]);
-  }
-
   // Lyrics Ideas CRUD
   Future<int> createLyricsIdea(LyricsIdea lyricsIdea) async {
     final db = await database;
